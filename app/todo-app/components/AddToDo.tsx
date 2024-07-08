@@ -1,9 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import style from "../../styles/style";
+import { signOut } from "firebase/auth";
+import { auth } from "../../lib/firebase/clientApp";
+import { useRouter } from "next/navigation";
 
 const AddToDo = () => {
   const [todos, settodos] = useState<any[]>([]);
+  const router = useRouter();
 
   console.log(todos);
 
@@ -34,6 +38,11 @@ const AddToDo = () => {
     settodos(updatedTodos);
   }
 
+  function handleSignOut() {
+    signOut(auth);
+    router.push("/");
+  }
+
   useEffect(() => {
     // Filter out completed todos
     const activeTodos = todos.filter((todo) => !todo.completed);
@@ -44,20 +53,29 @@ const AddToDo = () => {
 
   return (
     <>
-      <form className="fadeUp2 flex gap-5" onSubmit={handleSubmit}>
-        <input
-          className={`${style.inputStyles.lightThemeInput} text-[1.2rem]`}
-          type="text"
-          name="todo"
-          id="todo-input"
-          placeholder="Today I need to..."
-          maxLength={50}
-          required
-        />
-        <button type="submit" className={style.buttonStyles.lightThemeButton}>
-          Add
+      <div className="flex flex-col gap-5">
+        <form className="fadeUp2 flex gap-5" onSubmit={handleSubmit}>
+          <input
+            className={`${style.inputStyles.lightThemeInput} text-[1.2rem]`}
+            type="text"
+            name="todo"
+            id="todo-input"
+            placeholder="Today I need to..."
+            maxLength={50}
+            required
+          />
+          <button type="submit" className={style.buttonStyles.lightThemeButton}>
+            Add
+          </button>
+        </form>
+
+        <button
+          className="fadeUp3 text-neutral-400 hover:text-black"
+          onClick={handleSignOut}
+        >
+          Sign Out
         </button>
-      </form>
+      </div>
 
       <div className="fadeUp3 w-[30%]">
         {todos.map((todo: any) => (

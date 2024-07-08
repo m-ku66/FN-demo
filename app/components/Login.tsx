@@ -36,6 +36,23 @@ const Login = () => {
     let email = document.getElementsByName("email")[0] as HTMLInputElement;
     let pass = document.getElementsByName("password")[0] as HTMLInputElement;
     setloading(true);
+
+    //create a new user in the firebase backend
+    createUserWithEmailAndPassword(auth, email.value, pass.value)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        setloading(false);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMsg = error.message;
+        console.log(error);
+        alert(
+          `Error "${errorCode}: ${errorMsg}" has occured. Either contact the admin of this app or try again later...`
+        );
+        setloading(false);
+      });
   }
 
   return (
@@ -69,7 +86,7 @@ const Login = () => {
           <button
             className={`w-full ${style.buttonStyles.lightThemeButtonAlt}`}
             type="button"
-            onSubmit={handleSignUp}
+            onClick={handleSignUp}
           >
             Sign Up
           </button>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Login from "../components/Login";
+import useAuth from "../lib/hooks/useAuth";
 
 /**
  * Conditionally rendering app content based on user auth
@@ -9,7 +10,7 @@ import Login from "../components/Login";
  */
 
 const ToDoAppLayout = ({ children }: { children: React.ReactElement }) => {
-  const [isAuthenticated, setisAuthenticated] = useState<boolean>(false);
+  const isAuthenticated = useAuth();
   return isAuthenticated ? (
     <div>{children}</div>
   ) : (
