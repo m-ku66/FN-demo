@@ -1,15 +1,41 @@
 "use client";
 import React, { useState } from "react";
 import style from "../styles/style";
+import { auth } from "../lib/firebase/clientApp";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 const Login = () => {
   const [loading, setloading] = useState<boolean>(false);
-  function handleSignIn() {
-    alert("signed in");
+
+  //handles logging in
+  function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+    //prevent default refresh behavior and set local email and pass values to user inputted email and pass
+    e.preventDefault();
+    let email = e.currentTarget.email.value;
+    let pass = e.currentTarget.password.value;
+    setloading(true);
+
+    //Call firebase signin method, passing auth, email, and pass as params, then set loading to false and log user creds upon success
+    signInWithEmailAndPassword(auth, email, pass)
+      .then((userCredential) => {
+        console.log(userCredential);
+        setloading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(`${error} has occurred. Please try again later...`);
+        setloading(false);
+      });
   }
 
   function handleSignUp() {
-    alert("signing up");
+    let email = document.getElementsByName("email")[0] as HTMLInputElement;
+    let pass = document.getElementsByName("password")[0] as HTMLInputElement;
+    setloading(true);
   }
 
   return (
